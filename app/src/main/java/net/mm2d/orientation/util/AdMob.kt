@@ -21,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.mm2d.android.orientationfaker.BuildConfig
-import net.mm2d.log.Logger
 import java.net.URL
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -160,7 +159,6 @@ object AdMob {
             }
 
             override fun onConsentFormError(errorDescription: String?) {
-                Logger.e { "error:$errorDescription" }
                 continuation?.resume(ConsentStatus.UNKNOWN)
             }
         }
