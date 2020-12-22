@@ -72,17 +72,13 @@ class MainActivity : AppCompatActivity(), NightModeDialog.Callback {
     }
 
     private fun setUpAdView() {
-        AbTest.loadAdMobSize()
-        val adMobSize = settings.getAdMobSize()
-        adView = AdMob.makeSettingsAdView(this, adMobSize)
+        adView = AdMob.makeSettingsAdView(this)
         val param = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).also {
             it.gravity = Gravity.CENTER_HORIZONTAL
+            it.topMargin = resources.getDimensionPixelSize(R.dimen.margin_ad)
+            it.bottomMargin = resources.getDimensionPixelSize(R.dimen.margin_ad)
         }
-        if (adMobSize == AdMobSize.MEDIUM_RECTANGLE) {
-            binding.content.contentsContainer.addView(adView, 5, param)
-        } else {
-            binding.container.addView(adView, param)
-        }
+        binding.content.contentsContainer.addView(adView, 5, param)
     }
 
     @SuppressLint("NewApi")

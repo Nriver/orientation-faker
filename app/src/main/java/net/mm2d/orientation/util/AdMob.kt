@@ -22,16 +22,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.mm2d.android.orientationfaker.BuildConfig
 import net.mm2d.log.Logger
-import net.mm2d.orientation.util.AdMobSize.*
 import java.net.URL
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-/**
- * @author [大前良介 (OHMAE Ryosuke)](mailto:ryo@mm2d.net)
- */
 object AdMob {
     private const val UNIT_ID_SETTINGS = "ca-app-pub-3057634395460859/5509364941"
     private const val UNIT_ID_DETAILED = "ca-app-pub-3057634395460859/9578179809"
@@ -47,21 +43,14 @@ object AdMob {
         MobileAds.initialize(context) {}
     }
 
-    fun makeSettingsAdView(context: Context, adMobSize: AdMobSize): AdView = AdView(context).apply {
-        adSize = adMobSize.toAdSize()
+    fun makeSettingsAdView(context: Context): AdView = AdView(context).apply {
+        adSize = AdSize.MEDIUM_RECTANGLE
         adUnitId = UNIT_ID_SETTINGS
     }
 
     fun makeDetailedAdView(context: Context): AdView = AdView(context).apply {
         adSize = AdSize.SMART_BANNER
         adUnitId = UNIT_ID_DETAILED
-    }
-
-    private fun AdMobSize.toAdSize(): AdSize = when (this) {
-        SMART_BANNER -> AdSize.SMART_BANNER
-        BANNER -> AdSize.BANNER
-        LARGE_BANNER -> AdSize.LARGE_BANNER
-        MEDIUM_RECTANGLE -> AdSize.MEDIUM_RECTANGLE
     }
 
     fun loadAd(activity: ComponentActivity, adView: AdView) {
