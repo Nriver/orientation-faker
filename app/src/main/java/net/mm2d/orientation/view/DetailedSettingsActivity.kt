@@ -19,6 +19,7 @@ import android.widget.LinearLayout.LayoutParams
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.gridlayout.widget.GridLayout
 import androidx.gridlayout.widget.GridLayout.spec
@@ -70,11 +71,14 @@ class DetailedSettingsActivity : AppCompatActivity(),
     }
 
     private fun setUpAdView() {
-        adView = AdMob.makeDetailedAdView(this)
-        val param = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).also {
-            it.gravity = Gravity.CENTER_HORIZONTAL
+        binding.root.doOnLayout {
+            adView = AdMob.makeDetailedAdView(this, binding.root.width)
+            val param = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).also {
+                it.gravity = Gravity.CENTER_HORIZONTAL
+            }
+            binding.container.addView(adView, param)
+            AdMob.loadAd(this, adView)
         }
-        binding.container.addView(adView, param)
     }
 
     override fun onDestroy() {
@@ -103,7 +107,6 @@ class DetailedSettingsActivity : AppCompatActivity(),
         applyUseBlankIcon()
         applyAutoRotateWarning()
         applyNotificationPrivacy()
-        AdMob.loadAd(this, adView)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

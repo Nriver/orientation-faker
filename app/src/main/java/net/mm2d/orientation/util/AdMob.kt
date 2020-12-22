@@ -47,8 +47,9 @@ object AdMob {
         adUnitId = UNIT_ID_SETTINGS
     }
 
-    fun makeDetailedAdView(context: Context): AdView = AdView(context).apply {
-        adSize = AdSize.SMART_BANNER
+    fun makeDetailedAdView(context: Context, width: Int): AdView = AdView(context).apply {
+        val density = context.resources.displayMetrics.density
+        adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, (width / density).toInt())
         adUnitId = UNIT_ID_DETAILED
     }
 
