@@ -20,12 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Lifecycle.State
 import com.google.android.gms.ads.AdView
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.appupdate.AppUpdateOptions
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.UpdateAvailability
-import com.google.android.play.core.ktx.clientVersionStalenessDays
-import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import net.mm2d.android.orientationfaker.BuildConfig
 import net.mm2d.android.orientationfaker.R
 import net.mm2d.android.orientationfaker.databinding.ActivityMainBinding
@@ -66,7 +60,7 @@ class MainActivity : AppCompatActivity(), NightModeDialog.Callback {
             if (Settings.get().shouldAutoStart()) {
                 MainController.start()
             }
-            checkUpdate()
+            Updater.startUpdateIfAvailable(this)
         }
         setUpAdView()
     }
@@ -103,22 +97,6 @@ class MainActivity : AppCompatActivity(), NightModeDialog.Callback {
         handler.removeCallbacks(checkSystemSettingsTask)
     }
 
-    private fun checkUpdate() {
-        val manager = AppUpdateManagerFactory.create(applicationContext)
-        manager.appUpdateInfo.addOnSuccessListener { info ->
-            if (info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
-                info.clientVersionStalenessDays.let { it != null && it >= DAYS_FOR_UPDATE } &&
-                info.isImmediateUpdateAllowed
-            ) {
-                try {
-                    val options = AppUpdateOptions.defaultOptions(AppUpdateType.IMMEDIATE)
-                    manager.startUpdateFlow(info, this, options)
-                } catch (ignored: Exception) {
-                }
-            }
-        }
-    }
-
     private fun checkSystemSettings() {
         if (lifecycle.currentState != State.RESUMED) {
             return
@@ -148,6 +126,7 @@ class MainActivity : AppCompatActivity(), NightModeDialog.Callback {
             R.id.license -> LicenseActivity.start(this)
             R.id.source_code -> Launcher.openSourceCode(this)
             R.id.privacy_policy -> Launcher.openPrivacyPolicy(this)
+            R.id.mail_to_developer -> Launcher.sendMailToDeveloper(this)
             R.id.play_store -> Launcher.openGooglePlay(this)
             R.id.relevant_ads -> AdMob.updateConsent(this)
         }
@@ -230,6 +209,5 @@ class MainActivity : AppCompatActivity(), NightModeDialog.Callback {
 
     companion object {
         private const val CHECK_INTERVAL: Long = 5000L
-        private const val DAYS_FOR_UPDATE: Int = 2
     }
 }
