@@ -19,7 +19,6 @@ import net.mm2d.orientation.service.KeepAlive
 import net.mm2d.orientation.service.MainController
 import net.mm2d.orientation.settings.Settings
 import net.mm2d.orientation.tabs.CustomTabsHelper
-import net.mm2d.orientation.util.AdMob
 import net.mm2d.orientation.view.notification.NotificationHelper
 
 @Suppress("unused")
@@ -36,7 +35,6 @@ class App : Application() {
         OrientationHelper.initialize(this)
         KeepAlive.ensureResident()
         AppCompatDelegate.setDefaultNightMode(Settings.get().nightMode)
-        AdMob.initialize(this)
     }
 
     private fun setUpLogger() {

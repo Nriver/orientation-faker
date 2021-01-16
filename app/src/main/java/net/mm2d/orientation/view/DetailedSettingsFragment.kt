@@ -9,18 +9,14 @@ package net.mm2d.orientation.view
 
 import android.app.Activity
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout.LayoutParams
 import android.widget.Toast
 import androidx.annotation.ColorInt
-import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.gridlayout.widget.GridLayout
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.ads.AdView
 import net.mm2d.android.orientationfaker.R
 import net.mm2d.android.orientationfaker.databinding.FragmentDetailedSettingsBinding
 import net.mm2d.color.chooser.ColorChooserDialog
@@ -32,7 +28,6 @@ import net.mm2d.orientation.settings.Default
 import net.mm2d.orientation.settings.IconShape
 import net.mm2d.orientation.settings.OrientationList
 import net.mm2d.orientation.settings.Settings
-import net.mm2d.orientation.util.AdMob
 import net.mm2d.orientation.util.SystemSettings
 import net.mm2d.orientation.util.alpha
 import net.mm2d.orientation.util.opaque
@@ -49,7 +44,6 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
     private lateinit var orientationListStart: List<Int>
     private val orientationList: MutableList<Int> = mutableListOf()
     private lateinit var binding: FragmentDetailedSettingsBinding
-    private lateinit var adView: AdView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentDetailedSettingsBinding.bind(view)
@@ -99,18 +93,6 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
         setUpAutoRotateWarning()
         setUpNotificationPrivacy()
         setUpSystemSetting()
-        setUpAdView()
-    }
-
-    private fun setUpAdView() {
-        binding.root.doOnLayout {
-            adView = AdMob.makeDetailedAdView(requireContext(), binding.root.width)
-            val param = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).also {
-                it.gravity = Gravity.CENTER_HORIZONTAL
-            }
-            binding.container.addView(adView, param)
-            AdMob.loadAd(requireActivity(), adView)
-        }
     }
 
     private fun setUpSample() {
