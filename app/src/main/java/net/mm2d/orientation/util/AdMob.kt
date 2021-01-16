@@ -40,6 +40,10 @@ object AdMob {
 
     fun initialize(context: Context) {
         MobileAds.initialize(context) {}
+        if (BuildConfig.DEBUG) {
+            ConsentInformation.getInstance(context)
+                .debugGeography = DebugGeography.DEBUG_GEOGRAPHY_EEA
+        }
     }
 
     fun makeSettingsAdView(context: Context): AdView = AdView(context).apply {
@@ -51,6 +55,12 @@ object AdMob {
         val density = context.resources.displayMetrics.density
         adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, (width / density).toInt())
         adUnitId = UNIT_ID_DETAILED
+    }
+
+    fun confirm(activity: ComponentActivity) {
+        scope.launch {
+            loadAndConfirmConsentState(activity)
+        }
     }
 
     fun loadAd(activity: ComponentActivity, adView: AdView) {
@@ -88,9 +98,6 @@ object AdMob {
                 return@suspendCoroutine
             }
             val consentInformation = ConsentInformation.getInstance(activity)
-            if (BuildConfig.DEBUG) {
-                consentInformation.debugGeography = DebugGeography.DEBUG_GEOGRAPHY_EEA
-            }
             consentInformation.requestConsentInfoUpdate(
                 arrayOf(PUBLISHER_ID),
                 object : ConsentInfoUpdateListener {

@@ -104,12 +104,12 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
 
     private fun setUpAdView() {
         binding.root.doOnLayout {
-            adView = AdMob.makeDetailedAdView(this, binding.root.width)
+            adView = AdMob.makeDetailedAdView(requireContext(), binding.root.width)
             val param = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).also {
                 it.gravity = Gravity.CENTER_HORIZONTAL
             }
             binding.container.addView(adView, param)
-            AdMob.loadAd(this, adView)
+            AdMob.loadAd(requireActivity(), adView)
         }
     }
 

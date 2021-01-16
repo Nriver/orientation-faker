@@ -91,7 +91,7 @@ dependencies {
     implementation("net.mm2d:color-chooser:0.2.3")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.5")
 
-    implementation(platform("com.google.firebase:firebase-bom:26.2.0"))
+    implementation(platform("com.google.firebase:firebase-bom:26.3.0"))
     implementation("com.google.firebase:firebase-core")
     implementation("com.google.firebase:firebase-ads")
     implementation("com.google.firebase:firebase-perf")
