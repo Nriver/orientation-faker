@@ -39,6 +39,8 @@ interface Key {
         NIGHT_MODE_INT,
         ICON_SHAPE_STRING,
         SHOW_ALL_APPS_BOOLEAN,
+        @Deprecated("removed: 4.7.4")
+        AD_MOB_SIZE_STRING,
         ;
 
         companion object {

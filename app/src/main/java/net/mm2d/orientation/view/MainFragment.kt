@@ -11,16 +11,15 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
+import android.widget.LinearLayout.LayoutParams
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle.State
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.ads.AdView
 import net.mm2d.android.orientationfaker.BuildConfig
 import net.mm2d.android.orientationfaker.R
 import net.mm2d.android.orientationfaker.databinding.FragmentMainBinding
@@ -30,6 +29,7 @@ import net.mm2d.orientation.service.MainController
 import net.mm2d.orientation.service.MainService
 import net.mm2d.orientation.settings.NightModes
 import net.mm2d.orientation.settings.Settings
+import net.mm2d.orientation.util.AdMob
 import net.mm2d.orientation.util.Launcher
 import net.mm2d.orientation.util.SystemSettings
 import net.mm2d.orientation.util.Updater
@@ -45,6 +45,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val checkSystemSettingsTask = Runnable { checkSystemSettings() }
     private lateinit var notificationSample: NotificationSample
     private lateinit var binding: FragmentMainBinding
+    private lateinit var adView: AdView
+    private lateinit var relevantAds: MenuItem
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentMainBinding.bind(view)
@@ -72,6 +74,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     override fun onResume() {
         super.onResume()
         notificationSample.update()
+        AdMob.loadAd(requireActivity(), adView)
         handler.removeCallbacks(checkSystemSettingsTask)
         handler.post(checkSystemSettingsTask)
         applyStatus()
@@ -100,6 +103,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.main, menu)
+        relevantAds = menu.findItem(R.id.relevant_ads)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        relevantAds.isVisible = AdMob.isInEeaOrUnknown()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -109,6 +117,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             R.id.privacy_policy -> Launcher.openPrivacyPolicy(requireContext())
             R.id.mail_to_developer -> Launcher.sendMailToDeveloper(requireContext())
             R.id.play_store -> Launcher.openGooglePlay(requireContext())
+            R.id.relevant_ads -> AdMob.updateConsent(requireActivity())
         }
         return true
     }
@@ -125,6 +134,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             navigate(MainFragmentDirections.actionMainFragmentToEachAppFragment())
         }
         setUpNightMode()
+        setUpAdView()
+    }
+
+    private fun setUpAdView() {
+        adView = AdMob.makeSettingsAdView(requireContext())
+        val param = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).also {
+            it.gravity = Gravity.CENTER_HORIZONTAL
+            it.topMargin = resources.getDimensionPixelSize(R.dimen.margin_ad)
+            it.bottomMargin = resources.getDimensionPixelSize(R.dimen.margin_ad)
+        }
+        binding.content.contentsContainer.addView(adView, 5, param)
     }
 
     private fun navigate(directions: NavDirections) {

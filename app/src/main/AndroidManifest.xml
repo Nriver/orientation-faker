@@ -113,6 +113,15 @@
                 <action android:name="net.mm2d.android.orientationfaker.ACTION_ORIENTATION" />
             </intent-filter>
         </receiver>
+
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true"
+            />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3057634395460859~4653069539"
+            />
     </application>
 
 </manifest>

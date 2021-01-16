@@ -7,6 +7,8 @@ plugins {
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("com.github.ben-manes.versions")
+    id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
 }
 
 val applicationName = "OrientationFaker"
@@ -56,7 +58,7 @@ android {
     applicationVariants.all {
         if (buildType.name == "release") {
             outputs.all {
-                (this as BaseVariantOutputImpl).outputFileName = "${applicationName}-${versionName}.apk"
+                (this as BaseVariantOutputImpl).outputFileName = "${applicationName}-${versionName}-google-play.apk"
             }
         }
     }
@@ -88,6 +90,16 @@ dependencies {
     kapt("androidx.room:room-compiler:2.2.6")
     implementation("net.mm2d:color-chooser:0.2.3")
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.5")
+
+    implementation(platform("com.google.firebase:firebase-bom:26.3.0"))
+    implementation("com.google.firebase:firebase-core")
+    implementation("com.google.firebase:firebase-ads")
+    implementation("com.google.firebase:firebase-perf")
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-config-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.android.ads.consent:consent-library:1.0.8")
 }
 
 fun isStable(version: String): Boolean {
@@ -100,3 +112,5 @@ fun isStable(version: String): Boolean {
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     rejectVersionIf { !isStable(candidate.version) }
 }
+
+apply(plugin = "com.google.gms.google-services")
