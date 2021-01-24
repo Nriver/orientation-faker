@@ -17,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import net.mm2d.android.orientationfaker.R
 import net.mm2d.android.orientationfaker.databinding.ActivityMainBinding
 import net.mm2d.orientation.util.AdMob
+import net.mm2d.orientation.util.DeviceOrientationChecker
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         binding.toolbar.setupWithNavController(navHostFragment.navController)
         setSupportActionBar(binding.toolbar)
+        DeviceOrientationChecker.check(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

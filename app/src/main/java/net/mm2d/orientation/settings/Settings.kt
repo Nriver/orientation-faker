@@ -11,15 +11,16 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import net.mm2d.android.orientationfaker.BuildConfig
 import net.mm2d.orientation.control.Orientation
+import net.mm2d.orientation.control.toOrientation
 import net.mm2d.orientation.settings.Key.Main
 import java.io.File
 
 class Settings private constructor(
     private val preferences: Preferences<Main>
 ) {
-    var orientation: Int
-        get() = preferences.readInt(Main.ORIENTATION_INT, Orientation.UNSPECIFIED)
-        set(value) = preferences.writeInt(Main.ORIENTATION_INT, value)
+    var orientation: Orientation
+        get() = preferences.readInt(Main.ORIENTATION_INT, Orientation.UNSPECIFIED.value).toOrientation()
+        set(value) = preferences.writeInt(Main.ORIENTATION_INT, value.value)
 
     var foregroundColor: Int
         get() = preferences.readInt(Main.COLOR_FOREGROUND_INT, Default.color.foreground)
@@ -83,7 +84,7 @@ class Settings private constructor(
         get() = preferences.readBoolean(Main.USE_BLANK_ICON_FOR_NOTIFICATION_BOOLEAN, false)
         set(value) = preferences.writeBoolean(Main.USE_BLANK_ICON_FOR_NOTIFICATION_BOOLEAN, value)
 
-    var orientationList: List<Int>
+    var orientationList: List<Orientation>
         get() = OrientationList.toList(preferences.readString(Main.ORIENTATION_LIST_STRING, "")).let {
             if (it.isEmpty()) Default.orientationList else it
         }
@@ -116,6 +117,10 @@ class Settings private constructor(
     var showAllApps: Boolean
         get() = preferences.readBoolean(Main.SHOW_ALL_APPS_BOOLEAN, false)
         set(value) = preferences.writeBoolean(Main.SHOW_ALL_APPS_BOOLEAN, value)
+
+    var isLandscapeDevice: Boolean
+        get() = preferences.readBoolean(Main.LANDSCAPE_DEVICE_BOOLEAN, false)
+        set(value) = preferences.writeBoolean(Main.LANDSCAPE_DEVICE_BOOLEAN, value)
 
     fun resetTheme() {
         foregroundColor = Default.color.foreground

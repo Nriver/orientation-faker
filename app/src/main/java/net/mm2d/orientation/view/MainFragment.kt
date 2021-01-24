@@ -23,6 +23,7 @@ import com.google.android.gms.ads.AdView
 import net.mm2d.android.orientationfaker.BuildConfig
 import net.mm2d.android.orientationfaker.R
 import net.mm2d.android.orientationfaker.databinding.FragmentMainBinding
+import net.mm2d.orientation.control.Orientation
 import net.mm2d.orientation.event.EventRouter
 import net.mm2d.orientation.review.ReviewRequest
 import net.mm2d.orientation.service.MainController
@@ -213,7 +214,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         ReviewRequest.requestReviewIfNeed(this)
     }
 
-    private fun updateOrientation(orientation: Int) {
+    private fun updateOrientation(orientation: Orientation) {
         settings.orientation = orientation
         notificationSample.update()
         MainController.update()

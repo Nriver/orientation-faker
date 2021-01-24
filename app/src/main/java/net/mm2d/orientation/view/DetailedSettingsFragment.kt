@@ -25,6 +25,7 @@ import net.mm2d.android.orientationfaker.R
 import net.mm2d.android.orientationfaker.databinding.FragmentDetailedSettingsBinding
 import net.mm2d.color.chooser.ColorChooserDialog
 import net.mm2d.orientation.control.Orientation
+import net.mm2d.orientation.control.Orientations
 import net.mm2d.orientation.event.EventRouter
 import net.mm2d.orientation.service.MainController
 import net.mm2d.orientation.service.MainService
@@ -46,8 +47,8 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
     }
     private lateinit var notificationSample: NotificationSample
     private lateinit var checkList: List<CheckItemView>
-    private lateinit var orientationListStart: List<Int>
-    private val orientationList: MutableList<Int> = mutableListOf()
+    private lateinit var orientationListStart: List<Orientation>
+    private val orientationList: MutableList<Orientation> = mutableListOf()
     private lateinit var binding: FragmentDetailedSettingsBinding
     private lateinit var adView: AdView
 
@@ -145,7 +146,7 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
         }
     }
 
-    private fun updateOrientation(orientation: Int) {
+    private fun updateOrientation(orientation: Orientation) {
         settings.orientation = orientation
         notificationSample.update()
         MainController.update()
@@ -200,7 +201,7 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
         orientationListStart = settings.orientationList
         orientationList.addAll(orientationListStart)
 
-        checkList = Orientation.values.map { orientation ->
+        checkList = Orientations.entries.map { orientation ->
             CheckItemView(requireContext()).also { view ->
                 view.orientation = orientation.orientation
                 view.setIcon(orientation.icon)
@@ -228,7 +229,7 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
     }
 
     private fun updateCaution() {
-        if (orientationList.any { Orientation.experimental.contains(it) }) {
+        if (orientationList.any { it.isExperimental() }) {
             binding.content.caution.visibility = View.VISIBLE
         } else {
             binding.content.caution.visibility = View.GONE
