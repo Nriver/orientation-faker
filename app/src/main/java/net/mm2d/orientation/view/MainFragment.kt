@@ -11,8 +11,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.*
-import android.widget.LinearLayout.LayoutParams
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle.State
@@ -75,12 +77,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     override fun onResume() {
         super.onResume()
         notificationSample.update()
-        AdMob.loadAd(requireActivity(), adView)
         handler.removeCallbacks(checkSystemSettingsTask)
         handler.post(checkSystemSettingsTask)
         applyStatus()
         if (!SystemSettings.canDrawOverlays(requireContext())) {
             OverlayPermissionDialog.show(this)
+        } else {
+            AdMob.loadAd(requireActivity(), adView)
         }
     }
 
@@ -142,12 +145,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun setUpAdView() {
         adView = AdMob.makeSettingsAdView(requireContext())
-        val param = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).also {
-            it.gravity = Gravity.CENTER_HORIZONTAL
-            it.topMargin = resources.getDimensionPixelSize(R.dimen.margin_ad)
-            it.bottomMargin = resources.getDimensionPixelSize(R.dimen.margin_ad)
-        }
-        binding.content.contentsContainer.addView(adView, 5, param)
+        binding.content.adContainer.addView(adView)
     }
 
     private fun navigate(directions: NavDirections) {

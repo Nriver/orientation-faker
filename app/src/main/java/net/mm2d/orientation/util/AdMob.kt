@@ -10,6 +10,7 @@ package net.mm2d.orientation.util
 import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.*
 import androidx.lifecycle.Lifecycle.State
 import com.google.ads.consent.*
 import com.google.ads.mediation.admob.AdMobAdapter
@@ -35,6 +36,7 @@ object AdMob {
         "https://github.com/ohmae/orientation-faker/blob/develop/PRIVACY-POLICY.md"
     private var checked: Boolean = false
     private var isInEeaOrUnknown: Boolean = false
+    private var confirmed: Boolean = false
     private var consentStatus: ConsentStatus? = null
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 
@@ -44,6 +46,11 @@ object AdMob {
             ConsentInformation.getInstance(context)
                 .debugGeography = DebugGeography.DEBUG_GEOGRAPHY_EEA
         }
+        ProcessLifecycleOwner.get().lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                confirmed = false
+            }
+        })
     }
 
     fun makeSettingsAdView(context: Context): AdView = AdView(context).apply {
@@ -55,12 +62,6 @@ object AdMob {
         val density = context.resources.displayMetrics.density
         adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, (width / density).toInt())
         adUnitId = UNIT_ID_DETAILED
-    }
-
-    fun confirm(activity: ComponentActivity) {
-        scope.launch {
-            loadAndConfirmConsentState(activity)
-        }
     }
 
     fun loadAd(activity: ComponentActivity, adView: AdView) {
@@ -80,13 +81,10 @@ object AdMob {
             ConsentStatus.PERSONALIZED -> {
                 AdRequest.Builder().build()
             }
-            ConsentStatus.NON_PERSONALIZED -> {
+            else -> {
                 AdRequest.Builder()
                     .addNetworkExtrasBundle(AdMobAdapter::class.java, Bundle().apply { putString("npa", "1") })
                     .build()
-            }
-            else -> {
-                return
             }
         }
         adView.loadAd(request)
@@ -125,6 +123,11 @@ object AdMob {
             continuation.resume(ConsentStatus.PERSONALIZED)
             return true
         }
+        if (confirmed) {
+            continuation.resume(consentStatus ?: ConsentStatus.UNKNOWN)
+            return true
+        }
+        confirmed = true
         when (val status = consentStatus) {
             ConsentStatus.NON_PERSONALIZED,
             ConsentStatus.PERSONALIZED -> {

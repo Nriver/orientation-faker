@@ -16,7 +16,6 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import net.mm2d.android.orientationfaker.R
 import net.mm2d.android.orientationfaker.databinding.ActivityMainBinding
-import net.mm2d.orientation.util.AdMob
 import net.mm2d.orientation.util.DeviceOrientationChecker
 
 class MainActivity : AppCompatActivity() {
@@ -24,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        AdMob.confirm(this)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         binding.toolbar.setupWithNavController(navHostFragment.navController)
         setSupportActionBar(binding.toolbar)
