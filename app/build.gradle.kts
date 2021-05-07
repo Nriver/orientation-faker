@@ -14,7 +14,7 @@ plugins {
 val applicationName = "OrientationFaker"
 val versionMajor = 4
 val versionMinor = 7
-val versionPatch = 8
+val versionPatch = 9
 
 android {
     compileSdkVersion(30)
@@ -82,18 +82,18 @@ dependencies {
     implementation("com.google.android.material:material:1.3.0")
     implementation("com.google.android.play:core:1.10.0")
     implementation("com.google.android.play:core-ktx:1.8.1")
-    implementation("androidx.room:room-runtime:2.2.6")
-    implementation("androidx.room:room-ktx:2.2.6")
+    implementation("androidx.room:room-runtime:2.3.0")
+    implementation("androidx.room:room-ktx:2.3.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
-    kapt("androidx.room:room-compiler:2.2.6")
+    kapt("androidx.room:room-compiler:2.3.0")
     implementation("net.mm2d.color-chooser:color-chooser:0.2.5")
 
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.7")
-    debugImplementation("com.facebook.flipper:flipper:0.85.0")
+    debugImplementation("com.facebook.flipper:flipper:0.87.0")
     debugImplementation("com.facebook.soloader:soloader:0.10.1")
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:0.85.0")
-    debugImplementation("com.facebook.flipper:flipper-leakcanary2-plugin:0.85.0")
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:0.87.0")
+    debugImplementation("com.facebook.flipper:flipper-leakcanary2-plugin:0.87.0")
 
     implementation(platform("com.google.firebase:firebase-bom:27.0.0"))
     implementation("com.google.firebase:firebase-core")
