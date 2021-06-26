@@ -7,6 +7,7 @@ plugins {
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("com.github.ben-manes.versions")
+    id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
 }
@@ -116,5 +117,3 @@ fun isStable(version: String): Boolean {
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     rejectVersionIf { !isStable(candidate.version) }
 }
-
-apply(plugin = "com.google.gms.google-services")
