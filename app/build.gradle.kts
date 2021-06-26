@@ -95,9 +95,9 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-network-plugin:0.95.0")
     debugImplementation("com.facebook.flipper:flipper-leakcanary2-plugin:0.95.0")
 
-    implementation(platform("com.google.firebase:firebase-bom:27.1.0"))
+    implementation("com.google.android.gms:play-services-ads:20.2.0")
+    implementation(platform("com.google.firebase:firebase-bom:28.2.0"))
     implementation("com.google.firebase:firebase-core")
-    implementation("com.google.firebase:firebase-ads")
     implementation("com.google.firebase:firebase-perf")
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-analytics")

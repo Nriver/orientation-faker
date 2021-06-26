@@ -10,9 +10,9 @@ buildscript {
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5")
         classpath("com.github.ben-manes:gradle-versions-plugin:0.39.0")
 
-        classpath("com.google.gms:google-services:4.3.5")
-        classpath("com.google.firebase:perf-plugin:1.3.5")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.5.2")
+        classpath("com.google.gms:google-services:4.3.8")
+        classpath("com.google.firebase:perf-plugin:1.4.0")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:2.7.1")
     }
 }
 
