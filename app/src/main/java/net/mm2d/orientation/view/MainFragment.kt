@@ -17,8 +17,8 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle.State
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.ads.AdView
@@ -36,6 +36,7 @@ import net.mm2d.orientation.util.AdMob
 import net.mm2d.orientation.util.Launcher
 import net.mm2d.orientation.util.SystemSettings
 import net.mm2d.orientation.util.Updater
+import net.mm2d.orientation.util.autoCleared
 import net.mm2d.orientation.view.dialog.NightModeDialog
 import net.mm2d.orientation.view.dialog.NightModeDialogViewModel
 import net.mm2d.orientation.view.dialog.OverlayPermissionDialog
@@ -46,8 +47,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
     private val handler = Handler(Looper.getMainLooper())
     private val checkSystemSettingsTask = Runnable { checkSystemSettings() }
-    private lateinit var notificationSample: NotificationSample
-    private lateinit var binding: FragmentMainBinding
+    private var notificationSample: NotificationSample by autoCleared()
+    private var binding: FragmentMainBinding by autoCleared()
     private lateinit var adView: AdView
     private lateinit var relevantAds: MenuItem
 
@@ -55,7 +56,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding = FragmentMainBinding.bind(view)
         setHasOptionsMenu(true)
         setUpViews()
-        EventRouter.observeUpdate(this) {
+        EventRouter.observeUpdate(viewLifecycleOwner) {
             applyStatus()
             notificationSample.update()
         }
@@ -67,8 +68,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
             Updater.startUpdateIfAvailable(requireActivity())
         }
-        ViewModelProvider(this)
-            .get(NightModeDialogViewModel::class.java)
+        viewModels<NightModeDialogViewModel>().value
             .modeLiveData()
             .observe(viewLifecycleOwner, ::onSelectNightMode)
     }

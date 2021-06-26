@@ -22,8 +22,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -38,6 +38,7 @@ import net.mm2d.orientation.service.MainController
 import net.mm2d.orientation.service.MainService
 import net.mm2d.orientation.settings.Settings
 import net.mm2d.orientation.util.SystemSettings
+import net.mm2d.orientation.util.autoCleared
 import net.mm2d.orientation.view.dialog.EachAppOrientationDialog
 import net.mm2d.orientation.view.dialog.EachAppOrientationDialogViewModel
 import net.mm2d.orientation.view.dialog.UsageAppPermissionDialog
@@ -50,7 +51,7 @@ class EachAppFragment : Fragment(R.layout.fragment_each_app) {
     private var adapter: EachAppAdapter? = null
     private val job = Job()
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.IO + job)
-    private lateinit var binding: FragmentEachAppBinding
+    private var binding: FragmentEachAppBinding by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentEachAppBinding.bind(view)
@@ -58,8 +59,7 @@ class EachAppFragment : Fragment(R.layout.fragment_each_app) {
         binding.recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
         setUpSearch()
         setUpBottom()
-        ViewModelProvider(this)
-            .get(EachAppOrientationDialogViewModel::class.java)
+        viewModels<EachAppOrientationDialogViewModel>().value
             .changedPositionLiveData()
             .observe(viewLifecycleOwner, ::onChangeSettings)
         val appListLiveData = MutableLiveData<List<AppInfo>>()

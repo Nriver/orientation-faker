@@ -13,13 +13,12 @@ import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout.LayoutParams
-import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.core.view.doOnLayout
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.gridlayout.widget.GridLayout
-import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.ads.AdView
 import net.mm2d.android.orientationfaker.R
 import net.mm2d.android.orientationfaker.databinding.FragmentDetailedSettingsBinding
@@ -33,10 +32,7 @@ import net.mm2d.orientation.settings.Default
 import net.mm2d.orientation.settings.IconShape
 import net.mm2d.orientation.settings.OrientationList
 import net.mm2d.orientation.settings.Settings
-import net.mm2d.orientation.util.AdMob
-import net.mm2d.orientation.util.SystemSettings
-import net.mm2d.orientation.util.alpha
-import net.mm2d.orientation.util.opaque
+import net.mm2d.orientation.util.*
 import net.mm2d.orientation.view.dialog.*
 import net.mm2d.orientation.view.view.CheckItemView
 
@@ -49,22 +45,22 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
     private lateinit var checkList: List<CheckItemView>
     private lateinit var orientationListStart: List<Orientation>
     private val orientationList: MutableList<Orientation> = mutableListOf()
-    private lateinit var binding: FragmentDetailedSettingsBinding
+    private var binding: FragmentDetailedSettingsBinding by autoCleared()
     private lateinit var adView: AdView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentDetailedSettingsBinding.bind(view)
         setHasOptionsMenu(false)
         setUpViews()
-        EventRouter.observeUpdate(this) { notificationSample.update() }
-        val provider = ViewModelProvider(this)
-        provider.get(ResetThemeDialogViewModel::class.java)
+        EventRouter.observeUpdate(viewLifecycleOwner) { notificationSample.update() }
+
+        viewModels<ResetThemeDialogViewModel>().value
             .resetThemeLiveData()
             .observe(viewLifecycleOwner, ::resetTheme)
-        provider.get(ResetLayoutDialogViewModel::class.java)
+        viewModels<ResetLayoutDialogViewModel>().value
             .resetLayoutLiveData()
             .observe(viewLifecycleOwner, ::resetLayout)
-        provider.get(IconShapeDialogViewModel::class.java)
+        viewModels<IconShapeDialogViewModel>().value
             .iconShapeLiveData()
             .observe(viewLifecycleOwner, ::onSelectIconShape)
     }
@@ -239,7 +235,7 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
     private fun onClickCheckItem(view: CheckItemView) {
         if (view.isChecked) {
             if (orientationList.size <= OrientationList.MIN) {
-                Toast.makeText(requireContext(), R.string.toast_select_item_min, Toast.LENGTH_LONG).show()
+                Toaster.showLong(requireContext(), R.string.toast_select_item_min)
             } else {
                 orientationList.remove(view.orientation)
                 view.isChecked = false
@@ -247,7 +243,7 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
             }
         } else {
             if (orientationList.size >= OrientationList.MAX) {
-                Toast.makeText(requireContext(), R.string.toast_select_item_max, Toast.LENGTH_LONG).show()
+                Toaster.showLong(requireContext(), R.string.toast_select_item_max)
             } else {
                 orientationList.add(view.orientation)
                 view.isChecked = true

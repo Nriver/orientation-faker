@@ -13,8 +13,8 @@ plugins {
 
 val applicationName = "OrientationFaker"
 val versionMajor = 4
-val versionMinor = 7
-val versionPatch = 9
+val versionMinor = 8
+val versionPatch = 0
 
 android {
     compileSdkVersion(30)
@@ -65,10 +65,10 @@ android {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.core:core-ktx:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0")
+    implementation("androidx.appcompat:appcompat:1.3.0")
+    implementation("androidx.core:core-ktx:1.5.0")
     implementation("androidx.browser:browser:1.3.0")
     implementation("androidx.legacy:legacy-support-v13:1.0.0")
     implementation("androidx.lifecycle:lifecycle-process:2.3.1")
@@ -87,13 +87,13 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
     kapt("androidx.room:room-compiler:2.3.0")
-    implementation("net.mm2d.color-chooser:color-chooser:0.2.5")
+    implementation("net.mm2d.color-chooser:color-chooser:0.3.0")
 
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.7")
-    debugImplementation("com.facebook.flipper:flipper:0.87.0")
+    debugImplementation("com.facebook.flipper:flipper:0.95.0")
     debugImplementation("com.facebook.soloader:soloader:0.10.1")
-    debugImplementation("com.facebook.flipper:flipper-network-plugin:0.87.0")
-    debugImplementation("com.facebook.flipper:flipper-leakcanary2-plugin:0.87.0")
+    debugImplementation("com.facebook.flipper:flipper-network-plugin:0.95.0")
+    debugImplementation("com.facebook.flipper:flipper-leakcanary2-plugin:0.95.0")
 
     implementation(platform("com.google.firebase:firebase-bom:27.1.0"))
     implementation("com.google.firebase:firebase-core")
