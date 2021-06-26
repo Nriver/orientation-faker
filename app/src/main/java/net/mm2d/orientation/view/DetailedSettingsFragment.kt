@@ -46,7 +46,7 @@ class DetailedSettingsFragment : Fragment(R.layout.fragment_detailed_settings),
     private lateinit var orientationListStart: List<Orientation>
     private val orientationList: MutableList<Orientation> = mutableListOf()
     private var binding: FragmentDetailedSettingsBinding by autoCleared()
-    private lateinit var adView: AdView
+    private var adView: AdView by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentDetailedSettingsBinding.bind(view)

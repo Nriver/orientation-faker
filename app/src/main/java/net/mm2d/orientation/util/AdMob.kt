@@ -8,8 +8,8 @@
 package net.mm2d.orientation.util
 
 import android.content.Context
-import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.core.os.bundleOf
 import androidx.lifecycle.*
 import androidx.lifecycle.Lifecycle.State
 import com.google.ads.consent.*
@@ -18,9 +18,6 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import net.mm2d.android.orientationfaker.BuildConfig
 import java.net.URL
 import kotlin.coroutines.Continuation
@@ -38,7 +35,6 @@ object AdMob {
     private var isInEeaOrUnknown: Boolean = false
     private var confirmed: Boolean = false
     private var consentStatus: ConsentStatus? = null
-    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Main)
 
     fun initialize(context: Context) {
         MobileAds.initialize(context) {}
@@ -65,7 +61,7 @@ object AdMob {
     }
 
     fun loadAd(activity: ComponentActivity, adView: AdView) {
-        scope.launch {
+        activity.lifecycleScope.launchWhenCreated {
             loadAd(adView, loadAndConfirmConsentState(activity))
         }
     }
@@ -83,7 +79,7 @@ object AdMob {
             }
             else -> {
                 AdRequest.Builder()
-                    .addNetworkExtrasBundle(AdMobAdapter::class.java, Bundle().apply { putString("npa", "1") })
+                    .addNetworkExtrasBundle(AdMobAdapter::class.java, bundleOf("npa" to "1"))
                     .build()
             }
         }

@@ -32,11 +32,7 @@ import net.mm2d.orientation.service.MainController
 import net.mm2d.orientation.service.MainService
 import net.mm2d.orientation.settings.NightModes
 import net.mm2d.orientation.settings.Settings
-import net.mm2d.orientation.util.AdMob
-import net.mm2d.orientation.util.Launcher
-import net.mm2d.orientation.util.SystemSettings
-import net.mm2d.orientation.util.Updater
-import net.mm2d.orientation.util.autoCleared
+import net.mm2d.orientation.util.*
 import net.mm2d.orientation.view.dialog.NightModeDialog
 import net.mm2d.orientation.view.dialog.NightModeDialogViewModel
 import net.mm2d.orientation.view.dialog.OverlayPermissionDialog
@@ -49,8 +45,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private val checkSystemSettingsTask = Runnable { checkSystemSettings() }
     private var notificationSample: NotificationSample by autoCleared()
     private var binding: FragmentMainBinding by autoCleared()
-    private lateinit var adView: AdView
-    private lateinit var relevantAds: MenuItem
+    private var adView: AdView by autoCleared()
+    private var relevantAds: MenuItem by autoCleared()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentMainBinding.bind(view)
